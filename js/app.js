@@ -6,6 +6,7 @@ const state = {
   cart: null,
 };
 
+
 // Cart constructor.
 const Cart = function(items) {
   // this.items is an array of CartItem instances.
@@ -13,19 +14,45 @@ const Cart = function(items) {
 };
 
 Cart.prototype.addItem = function(product, quantity) {
-  // TODO: Fill in this instance method to create a new CartItem and add it to this.items
+  // DONE: Fill in this instance method to create a new CartItem and add it to this.items
+
+  this.items.push([product, quantity])
+
 };
 
+
 Cart.prototype.saveToLocalStorage = function() {
-  // TODO: Fill in this instance method to save the contents of the cart to localStorage
+  // DONE: Fill in this instance method to save the contents of the cart to localStorage
+  let itemToStore = JSON.stringify(this.items);
+  localStorage.setItem('cart', itemToStore);
 };
 
 Cart.prototype.removeItem = function(item) {
-  // TODO: Fill in this instance method to remove one item from the cart.
+  // DONE: Fill in this instance method to remove one item from the cart.
   // Note: You will have to decide what kind of parameter to pass in here!
+
+  let myCart = localStorage.getItem('cart')
+  myCart = JSON.parse(myCart)
+
+
+  for (let i = 0; i < myCart.length; i++) {
+    if (myCart[i][0] === item) {
+      myCart.splice(i)
+    }
+  }
+  let stringifiedCart = JSON.stringify(myCart)
+  localStorage.setItem('cart', stringifiedCart)
+  
 };
 
 Cart.prototype.updateCounter = function() {
+  let itemCount = 0;
+  console.log('hello')
+  for (let i = 0; i < state.cart.items.length; i++) {
+    itemCount++;
+  } 
+  let count = document.getElementById('itemCount');
+  count.textContent = itemCount;
   // TODO: Update the cart count in the header nav with the number of items in the Cart
 }
 
@@ -63,5 +90,7 @@ function generateCatalog() {
   state.allProducts.push(bag, banana, bathroom, boots, breakfast, bubblegum, chair, cthulu, dogDuck, dragon, pen, petSweep, scissors, shark, sweep, tauntaun, unicorn, waterCan, wineGlass);
 }
 
+
 // Initialize the app by creating the big list of products with images and names
 generateCatalog();
+
